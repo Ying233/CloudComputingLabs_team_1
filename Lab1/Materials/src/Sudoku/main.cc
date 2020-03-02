@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
   }
   int64_t end = now();
   double sec = (end-start)/1000000.0;
-  printf("%f sec %f ms each %d\n", sec, 1000*sec/total, total_solved);
+  printf("%f sec %f ms each %d\n", sec, 1000*sec/total, total_solved);             //获取时间并打印结果，时间是用来进行相关测试的
 
   return 0;
 }
