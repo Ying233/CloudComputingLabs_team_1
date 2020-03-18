@@ -1,54 +1,72 @@
+#include <iostream>
+#include <fstream> 
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <sys/time.h>
+#include <vector>
+#include <pthread.h>
 
 #include "global.hpp"
+using namespace std;
 
-int board[N];
+long Sudoku_Problem_Size = 20;
+int Producer_Num = 2;
+int Consumer_Num = 6;
 
 int64_t now()
 {
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return tv.tv_sec * 1000000 + tv.tv_usec;
-}
-
-void input(const char in[N])
-{
-  for (int cell = 0; cell < N; ++cell) {
-    board[cell] = in[cell] - '0';
-    assert(0 <= board[cell] && board[cell] <= NUM);
-  }
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
 int main(int argc, char* argv[])
 {
-  FILE* fp = fopen(argv[1], "r");
-  char puzzle[128];
-  int total_solved = 0;
-  int total = 0;
-  bool (*solve)(int) = solve_sudoku_dancing_links;
-  int64_t start = now();
-  while (fgets(puzzle, sizeof puzzle, fp) != NULL) {
-    if (strlen(puzzle) >= N) {
-      ++total;
-      input(puzzle);
-      for(int i=0;i<N;i++)
-        printf("%d",board[i]);
-      printf("\n");
-      if (solve(0))
-        ++total_solved;
-      else {
-        printf("No: %s", puzzle);
-      }
-    }
-  }
-  int64_t end = now();
-  double sec = (end-start)/1000000.0;
-  printf("%f sec %f ms each %d\n", sec, 1000*sec/total, total_solved);
+	File_input();
+	Sudoku_Problem_Size = Sudoku_Problem.size();
 
-  return 0;
+	// Init();
+
+    // pthread_t Producer_Thread[Producer_Num];
+    pthread_t Consumer_Thread[Consumer_Num];
+	ThreadParas thPara[Consumer_Num];
+
+	// for(int i=0;i<Producer_Num;i++)
+	// {
+	// 	if(pthread_create(&Producer_Thread[i], NULL,  Sudoku_Producer, NULL) != 0)
+	// 	{
+	// 		perror("pthread_create failed");
+	// 		exit(1);
+	// 	}
+	// }
+
+	for(int i=0;i<Consumer_Num;i++)
+	{
+		int first=(int)(Sudoku_Problem_Size/Consumer_Num)*i;
+    	int last;
+    	if(i != Consumer_Num-1)
+    		last=(int)(Sudoku_Problem_Size/Consumer_Num)*(i+1);
+    	else
+    		last=Sudoku_Problem_Size;
+		thPara[i].num = i;
+    	thPara[i].first=first;
+    	thPara[i].last=last;
+		if(pthread_create(&Consumer_Thread[i], NULL, Consume_Sudoku_Problem, &thPara[i]) != 0)
+		{
+			perror("pthread_create failed");
+			exit(1);
+		}
+	}
+
+
+	// for(int i=0;i<Producer_Num;i++)
+    // 	pthread_join(Producer_Thread[i], NULL);
+
+	for(int i=0;i<Consumer_Num;i++)
+    	pthread_join(Consumer_Thread[i], NULL);
+
+	return 0;
 }
 

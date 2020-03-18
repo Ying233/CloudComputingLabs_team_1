@@ -3,5 +3,5 @@ CXXFLAGS+=-Wall -Wextra
 
 all: sudoku
 
-sudoku: main.cc Dancing_Links_Solver.cc
-	g++ -O2 -o $@ $^
+sudoku: main.cc Dancing_Links_Solver.cc Sudoku_Producer.cc Sudoku_Consumer.cc File_Input.cc
+	g++ -O2 -pthread -o $@ $^

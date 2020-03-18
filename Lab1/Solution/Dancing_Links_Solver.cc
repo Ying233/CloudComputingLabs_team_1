@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "global.hpp"
-
 using namespace std;
 
 struct Node;
@@ -251,14 +250,28 @@ struct Dance
         old->size++;
         nnew->col = old;
     }
+
+    std::string Output()
+    {
+        std::string ans = "";
+        for (int i = 0; i < N; i++)
+        {
+            ans += inout_[i] + '0';
+        }
+        return ans;
+    }
 };
 
-bool solve_sudoku_dancing_links(int unused)
+string solve_sudoku_dancing_links(string in)
 {
-  Dance d(board);
-  bool ans = d.solve();
-  for(int i=0;i<N;i++)
-    printf("%d",d.inout_[i]);
-    printf("\n");
-  return ans;
+    int board[N];
+	for (int cell = 0; cell < N; ++cell) {
+		board[cell] = in[cell] - '0';
+		assert(0 <= board[cell] && board[cell] <= NUM);
+	}
+    Dance d(board);
+    if(d.solve())
+        return d.Output();
+    else
+        return "SORRY";
 }
