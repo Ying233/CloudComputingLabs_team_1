@@ -11,9 +11,9 @@
 #include "global.hpp"
 using namespace std;
 
-long Sudoku_Problem_Size = 20;
+long Sudoku_Problem_Size = 1000;
 int Producer_Num = 2;
-int Consumer_Num = 6;
+int Consumer_Num = 2;
 
 int64_t now()
 {
@@ -26,13 +26,14 @@ int main(int argc, char* argv[])
 {
 	File_input();
 	Sudoku_Problem_Size = Sudoku_Problem.size();
+	if(DEBUG_MODE)
+		cin >>Consumer_Num;
+
+	int64_t start = now();
 
 	// Init();
 
     // pthread_t Producer_Thread[Producer_Num];
-    pthread_t Consumer_Thread[Consumer_Num];
-	ThreadParas thPara[Consumer_Num];
-
 	// for(int i=0;i<Producer_Num;i++)
 	// {
 	// 	if(pthread_create(&Producer_Thread[i], NULL,  Sudoku_Producer, NULL) != 0)
@@ -41,6 +42,9 @@ int main(int argc, char* argv[])
 	// 		exit(1);
 	// 	}
 	// }
+
+    pthread_t Consumer_Thread[Consumer_Num];
+	ThreadParas thPara[Consumer_Num];
 
 	for(int i=0;i<Consumer_Num;i++)
 	{
@@ -66,6 +70,22 @@ int main(int argc, char* argv[])
 
 	for(int i=0;i<Consumer_Num;i++)
     	pthread_join(Consumer_Thread[i], NULL);
+
+	int count = 0;
+	for(int i=0;i<Consumer_Num;i++){
+		vector<string>::iterator it;
+		for(it=thPara[i].result.begin();it!=thPara[i].result.end();it++){
+			if(DEBUG_MODE){
+				cout <<endl <<Sudoku_Problem[count] <<endl;
+				count++;
+			}
+			cout <<*it <<endl;
+		}
+	}
+
+	int64_t end = now();
+	double sec = (end-start)/1000000.0;
+	printf("%f sec \n", sec); 
 
 	return 0;
 }

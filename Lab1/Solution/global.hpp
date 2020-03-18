@@ -16,7 +16,7 @@ typedef struct {
 	vector<string> result;
 }ThreadParas;
 
-const bool DEBUG_MODE = true;
+const bool DEBUG_MODE = false;
 enum { ROW=9, COL=9, N = 81, NEIGHBOR = 20 };
 const int NUM = 9;
 
