@@ -7,13 +7,18 @@
 #include <sys/time.h>
 #include <vector>
 #include <pthread.h>
-
+#include <sys/sysinfo.h>
 #include "global.hpp"
 using namespace std;
 
+int cpu()
+{
+   return get_nprocs();
+}
+
 long Sudoku_Problem_Size = 1000;
 int Producer_Num = 2;
-int Consumer_Num = 2;
+int Consumer_Num = cpu();
 
 int64_t now()
 {
