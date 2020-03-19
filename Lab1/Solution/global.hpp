@@ -17,6 +17,9 @@ typedef struct {
 }ThreadParas;
 
 const bool DEBUG_MODE = false;
+const bool OUTPUT_ANS = false;
+const bool SHOW_TIME = true;
+
 enum { ROW=9, COL=9, N = 81, NEIGHBOR = 20 };
 const int NUM = 9;
 

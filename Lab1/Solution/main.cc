@@ -16,16 +16,16 @@ int cpu()
    return get_nprocs();
 }
 
-long Sudoku_Problem_Size = 1000;
-int Producer_Num = 2;
-int Consumer_Num = cpu();
-
 int64_t now()
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	return tv.tv_sec * 1000000 + tv.tv_usec;
 }
+
+long Sudoku_Problem_Size = 1000;
+int Producer_Num = 2;
+int Consumer_Num = cpu();
 
 int main(int argc, char* argv[])
 {
@@ -34,7 +34,21 @@ int main(int argc, char* argv[])
 	if(DEBUG_MODE)
 		cin >>Consumer_Num;
 
-	int64_t start = now();
+	if(SHOW_TIME){
+		printf("the Sudoku Problem Size %ld \n", Sudoku_Problem_Size);
+		int64_t start = now();
+
+		for(int i=0;i<Sudoku_Problem_Size;i++){
+			string ans = "";
+			ans = solve_sudoku_dancing_links(Sudoku_Problem[i]);
+		}
+		int64_t end = now();
+		double sec = (end-start)/1000000.0;
+		printf("just  one  thread ,spend  %f  sec \n", sec); 
+	}
+	
+
+	int64_t start_thread = now();
 
 	// Init();
 
@@ -69,28 +83,31 @@ int main(int argc, char* argv[])
 		}
 	}
 
-
 	// for(int i=0;i<Producer_Num;i++)
     // 	pthread_join(Producer_Thread[i], NULL);
 
 	for(int i=0;i<Consumer_Num;i++)
     	pthread_join(Consumer_Thread[i], NULL);
 
-	int count = 0;
-	for(int i=0;i<Consumer_Num;i++){
-		vector<string>::iterator it;
-		for(it=thPara[i].result.begin();it!=thPara[i].result.end();it++){
-			if(DEBUG_MODE){
-				cout <<endl <<Sudoku_Problem[count] <<endl;
-				count++;
+	int64_t end_thread = now();
+
+	if(OUTPUT_ANS){
+		int count = 0;
+		for(int i=0;i<Consumer_Num;i++){
+			vector<string>::iterator it;
+			for(it=thPara[i].result.begin();it!=thPara[i].result.end();it++){
+				if(DEBUG_MODE){
+					cout <<endl <<Sudoku_Problem[count] <<endl;
+					count++;
+				}
+				cout <<*it <<endl;
 			}
-			cout <<*it <<endl;
 		}
 	}
-
-	int64_t end = now();
-	double sec = (end-start)/1000000.0;
-	printf("%f sec \n", sec); 
+	if(SHOW_TIME){
+		double sec_thread = (end_thread-start_thread)/1000000.0;
+		printf("create  %d  thread ,spend  %f  sec \n", Consumer_Num, sec_thread); 
+	}
 
 	return 0;
 }
