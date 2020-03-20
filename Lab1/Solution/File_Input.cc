@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<string> Filename;
-vector<string> Sudoku_Problem;
+string Sudoku_Problem[100000];
 
 
 void File_input(){
@@ -16,7 +16,7 @@ void File_input(){
     while(getline(cin,filename) && filename != ""){
         Filename.push_back(filename);
     }
-
+    /*
     vector<string>::iterator i;
     for(i=Filename.begin();i!=Filename.end();i++){
         std::ifstream ifs;
@@ -26,5 +26,6 @@ void File_input(){
             Sudoku_Problem.push_back(line);
         }
     }
+    */
 }
 

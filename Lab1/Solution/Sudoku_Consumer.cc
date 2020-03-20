@@ -8,16 +8,16 @@
 #include "global.hpp"
 using namespace std;
 
-extern sem_t Sudoku_Problem_Mutex;
-extern sem_t Sudoku_Problem_Empty;
-extern sem_t Sudoku_Problem_Full;
+//extern sem_t Sudoku_Problem_Mutex;
+//extern sem_t Sudoku_Problem_Empty;
+//extern sem_t Sudoku_Problem_Full;
+
 
 void * Consume_Sudoku_Problem(void *arg){
-    ThreadParas* para = (ThreadParas*) arg;
+    /*ThreadParas* para = (ThreadParas*) arg;
     int num = para->num;
     int first=para->first;
     int last=para->last;
-
     string ans = "";
     for(int i=first;i<last;i++){
         ans = solve_sudoku_dancing_links(Sudoku_Problem[i]);
@@ -26,7 +26,18 @@ void * Consume_Sudoku_Problem(void *arg){
             cout <<i <<" : " <<ans <<endl;
         }
         para->result.push_back(ans);
-    }  
+    }*/
+    ThreadParas* para = (ThreadParas*) arg;
+    string ans = "";
+    while(flag){
+		sem_wait(&Sudoku_Problem_Full);
+		sem_wait(&Sudoku_Problem_Mutex);
+		ans = solve_sudoku_dancing_links(Sudoku_Problem[handling--]);
+        //cout<<"HC"<<para->num<<":"<<handling<<endl;
+		para->result.push_back(ans);
+		sem_post(&Sudoku_Problem_Mutex);
+		sem_post(&Sudoku_Problem_Empty);
+    }
 }
 
 void * Sudoku_Consumer(void *arg){

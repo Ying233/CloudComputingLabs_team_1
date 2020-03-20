@@ -11,8 +11,8 @@ using namespace std;
 
 typedef struct {
 	int num;
-	int first;
-	int last;
+	//int first;
+	//int last;
 	vector<string> result;
 }ThreadParas;
 
@@ -26,13 +26,15 @@ const int NUM = 9;
 extern long Sudoku_Problem_Size;
 extern int Producer_Num;
 extern int Consumer_Num;
+extern int handling;
+extern int flag;
 
 extern sem_t Sudoku_Problem_Mutex;
 extern sem_t Sudoku_Problem_Empty;
 extern sem_t Sudoku_Problem_Full;
 
 extern std::vector<std::string> Filename;
-extern std::vector<std::string> Sudoku_Problem;
+extern string Sudoku_Problem[100000];
 
 std::string solve_sudoku_dancing_links(std::string in);
 void File_input();
@@ -41,5 +43,6 @@ void * Sudoku_Producer(void *arg);
 void * Sudoku_Consumer(void *arg);
 
 void * Consume_Sudoku_Problem(void *arg);
+void * Produce_Sudoku_Problem(void *arg);
 
 #endif
