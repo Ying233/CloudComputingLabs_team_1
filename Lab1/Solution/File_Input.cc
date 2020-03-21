@@ -28,3 +28,19 @@ void File_input(){
     }
 }
 
+
+//
+int num=文件数目；
+pthread_t Input_Thread[2];
+
+	for(int i=0;i<2;i++)
+	{
+		//首先根据文件的数目，由两个线程进行读取
+一分为2，静态分配
+	}
+    	
+
+		pthread_create(&Input_Thread[i], NULL, input, &thPara[i]) != 0)
+	
+	}
+
