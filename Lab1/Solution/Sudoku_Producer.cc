@@ -19,22 +19,7 @@ void Init(){
 }
 
 void Produce_Sudoku_Problem(){
-    /*vector<string>::iterator i;
-    for(i=Filename.begin();i!=Filename.end();i++){
-        std::ifstream ifs;
-        ifs.open (*i, std::ifstream::in);
-        string line = "";
-        while(getline(ifs,line)){
-			sem_wait(&Sudoku_Problem_Empty);
-			sem_wait(&Sudoku_Problem_Mutex);
-            Sudoku_Problem[++handling] = line;
-            ++Sudoku_Problem_Size;
-            //cout<<"HP:"<<handling<<endl;
-			sem_post(&Sudoku_Problem_Mutex);
-			sem_post(&Sudoku_Problem_Full);
-        }
-    }
-    flag = 0;*/
+  
 }
 
 void * Sudoku_Producer(void *arg){
