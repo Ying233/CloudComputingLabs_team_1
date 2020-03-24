@@ -28,7 +28,7 @@ int Producer_Num = 2;
 int Consumer_Num = cpu();
 
 int main(int argc, char* argv[])
-{
+{	double time1,time2;
 	File_input();
 	Sudoku_Problem_Size = Sudoku_Problem.size();
 	if(DEBUG_MODE)
@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
 		}
 		int64_t end = now();
 		double sec = (end-start)/1000000.0;
+		time1=sec;
 		printf("just  one  thread ,spend  %f  sec \n", sec); 
 	}
 	
@@ -106,9 +107,11 @@ int main(int argc, char* argv[])
 	}
 	if(SHOW_TIME){
 		double sec_thread = (end_thread-start_thread)/1000000.0;
+		time2=sec_thread;
 		printf("create  %d  thread ,spend  %f  sec \n", Consumer_Num, sec_thread); 
 	}
-
+		double rate=time1/time2;
+		printf("the ratio of serial execution time to parallel execution time:%f\n",rate);
 	return 0;
 }
 
